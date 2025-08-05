@@ -1,7 +1,7 @@
 {
   "name": "clash-pot-app",
   "version": "0.1.0",
-  "homepage": "https://YOUR_USERNAME.github.io/clash-pot-app",
+  "homepage": "https://orange3134.github.io/clash-pot-app",
   "private": true,
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
