@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/clash-pot-app/static/css/main.b102a78a.css",
-    "main.js": "/clash-pot-app/static/js/main.05f3a98c.js",
+    "main.css": "/clash-pot-app/static/css/main.d10b7b8e.css",
+    "main.js": "/clash-pot-app/static/js/main.993aa9a7.js",
     "static/js/453.81ceb4f7.chunk.js": "/clash-pot-app/static/js/453.81ceb4f7.chunk.js",
     "index.html": "/clash-pot-app/index.html",
-    "main.b102a78a.css.map": "/clash-pot-app/static/css/main.b102a78a.css.map",
-    "main.05f3a98c.js.map": "/clash-pot-app/static/js/main.05f3a98c.js.map",
+    "main.d10b7b8e.css.map": "/clash-pot-app/static/css/main.d10b7b8e.css.map",
+    "main.993aa9a7.js.map": "/clash-pot-app/static/js/main.993aa9a7.js.map",
     "453.81ceb4f7.chunk.js.map": "/clash-pot-app/static/js/453.81ceb4f7.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.b102a78a.css",
-    "static/js/main.05f3a98c.js"
+    "static/css/main.d10b7b8e.css",
+    "static/js/main.993aa9a7.js"
   ]
 }
