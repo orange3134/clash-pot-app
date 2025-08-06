@@ -3,16 +3,19 @@ import MatchForm from "./components/MatchForm";
 import MatchList from "./components/MatchList";
 import MatchDetail from "./components/MatchDetail";
 import DataManager from "./components/DataManager";
-import { Match } from "./types";
+import BettorStatsView from "./components/BettorStatsView";
+import { Match, BettorStats } from "./types";
 import { getMatches, deleteMatch } from "./utils/storage";
+import { calculateBettorStats } from "./utils/bettorStats";
 
-type View = "list" | "form" | "detail" | "data";
+type View = "list" | "form" | "detail" | "data" | "stats";
 
 function App() {
   const [currentView, setCurrentView] = useState<View>("list");
   const [matches, setMatches] = useState<Match[]>([]);
   const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
   const [editingMatch, setEditingMatch] = useState<Match | null>(null);
+  const [bettorStats, setBettorStats] = useState<BettorStats[]>([]);
 
   useEffect(() => {
     loadMatches();
@@ -26,6 +29,10 @@ function App() {
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
     setMatches(loadedMatches);
+
+    // 賭け参加者統計を計算
+    const stats = calculateBettorStats(loadedMatches);
+    setBettorStats(stats);
   };
 
   const handleMatchSaved = () => {
@@ -76,6 +83,12 @@ function App() {
             <div className="flex space-x-3">
               {currentView === "list" && (
                 <>
+                  <button
+                    onClick={() => setCurrentView("stats")}
+                    className="px-4 py-2 text-purple-600 hover:text-purple-800 border border-purple-300 rounded-md hover:bg-purple-50"
+                  >
+                    参加者統計
+                  </button>
                   <button
                     onClick={() => setCurrentView("data")}
                     className="px-4 py-2 text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md hover:bg-gray-50"
@@ -128,6 +141,10 @@ function App() {
           )}
 
           {currentView === "data" && <DataManager onDataUpdate={loadMatches} />}
+
+          {currentView === "stats" && (
+            <BettorStatsView bettorStats={bettorStats} />
+          )}
         </div>
       </main>
 

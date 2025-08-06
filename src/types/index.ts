@@ -35,3 +35,13 @@ export interface MatchResults {
     payout: number;
   }>;
 }
+
+export interface BettorStats {
+  name: string;
+  totalBetAmount: number; // 賭け口数の合計
+  totalPayout: number;
+  netResult: number;
+  matchCount: number;
+  winCount: number;
+  winRate: number;
+}
