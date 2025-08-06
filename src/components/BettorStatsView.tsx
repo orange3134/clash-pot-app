@@ -53,7 +53,7 @@ const BettorStatsView: React.FC<BettorStatsViewProps> = ({ bettorStats }) => {
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                 総賭け口数
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-right text-xs font-medium text-primary-700 uppercase tracking-wider bg-primary-50">
                 総配当
               </th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -100,22 +100,14 @@ const BettorStatsView: React.FC<BettorStatsViewProps> = ({ bettorStats }) => {
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-900">
                   {stats.totalBetAmount}口
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-900">
-                  {formatCurrency(stats.totalPayout)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <span
-                    className={`${
-                      stats.netResult > 0
-                        ? "text-green-600"
-                        : stats.netResult < 0
-                        ? "text-red-600"
-                        : "text-gray-900"
-                    }`}
-                  >
-                    {stats.netResult > 0 && "+"}
-                    {formatCurrency(stats.netResult)}
+                <td className="px-6 py-4 whitespace-nowrap text-right text-sm bg-primary-50">
+                  <span className="font-bold text-primary-900">
+                    {formatCurrency(stats.totalPayout)}
                   </span>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-900">
+                  {stats.netResult > 0 && "+"}
+                  {formatCurrency(stats.netResult)}
                 </td>
               </tr>
             ))}
