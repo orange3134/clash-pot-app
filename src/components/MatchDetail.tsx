@@ -78,7 +78,8 @@ export default function MatchDetail({ match, onBack }: MatchDetailProps) {
                 {match.bettors.map((bettor, index) => {
                   const fighter = match.fighters.find(f => f.id === bettor.fighterId);
                   const isWinner = match.winnerId === bettor.fighterId;
-                  const payout = results?.winningBettors.find(w => w.bettor.id === bettor.id)?.payout || 0;
+                  const winningBettor = results?.winningBettors.find(w => w.bettor.id === bettor.id);
+                  const totalPayout = winningBettor ? (winningBettor.payout + (winningBettor.specialAllowance || 0)) : 0;
                   
                   return (
                     <tr key={bettor.id} className={`border-b ${isWinner ? 'bg-green-50' : ''}`}>
@@ -95,7 +96,7 @@ export default function MatchDetail({ match, onBack }: MatchDetailProps) {
                       {results && (
                         <td className="py-3 px-4">
                           <span className={`font-bold ${isWinner ? 'text-green-600' : 'text-red-600'}`}>
-                            {isWinner ? formatCurrency(payout) : '$0.00'}
+                            {isWinner ? formatCurrency(totalPayout) : '$0.00'}
                           </span>
                         </td>
                       )}

@@ -21,6 +21,10 @@ export interface Match {
   bettorSpecialAllowance: number; // ベッター特別手当
   createdAt: string;
   isCompleted: boolean;
+  paymentStatus?: {
+    fighters: { [fighterId: string]: boolean }; // 選手への支払い状況
+    bettors: { [bettorId: string]: boolean }; // ベッターへの支払い状況
+  };
 }
 
 export interface MatchResults {

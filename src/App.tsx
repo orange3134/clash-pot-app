@@ -154,11 +154,11 @@ function App() {
           {currentView === "data" && <DataManager onDataUpdate={loadMatches} />}
 
           {currentView === "stats" && (
-            <BettorStatsView bettorStats={bettorStats} />
+            <BettorStatsView bettorStats={bettorStats} matches={matches} onDataUpdate={loadMatches} />
           )}
 
           {currentView === "fighterStats" && (
-            <FighterStatsView fighterStats={fighterStats} />
+            <FighterStatsView fighterStats={fighterStats} matches={matches} onDataUpdate={loadMatches} />
           )}
         </div>
       </main>
