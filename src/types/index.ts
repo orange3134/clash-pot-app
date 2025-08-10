@@ -75,3 +75,14 @@ export interface PaymentStats {
   bettorMatches: number; // ベッターとして参加した試合数
   isPaid: boolean; // 全体の支払い状況
 }
+
+export interface OrganizationStats {
+  totalBetAmount: number; // 掛け金総額
+  totalPoolAmount: number; // 山分け総額
+  totalOrganizerProfit: number; // 主催者利益
+  totalFighterPrizeAmount: number; // 選手賞金総額
+  totalEntryFees: number; // 選手参加費
+  totalMayorSpecialPrize: number; // 市長特別賞金
+  totalBettorSpecialAllowance: number; // ベッター特別手当
+  matchCount: number; // 試合数
+}

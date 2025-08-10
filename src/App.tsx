@@ -6,11 +6,19 @@ import DataManager from "./components/DataManager";
 import BettorStatsView from "./components/BettorStatsView";
 import FighterStatsView from "./components/FighterStatsView";
 import PaymentStatsView from "./components/PaymentStatsView";
-import { Match, BettorStats, FighterStats, PaymentStats } from "./types";
+import OrganizationStatsView from "./components/OrganizationStatsView";
+import {
+  Match,
+  BettorStats,
+  FighterStats,
+  PaymentStats,
+  OrganizationStats,
+} from "./types";
 import { getMatches, deleteMatch } from "./utils/storage";
 import { calculateBettorStats } from "./utils/bettorStats";
 import { calculateFighterStats } from "./utils/fighterStats";
 import { calculatePaymentStats } from "./utils/paymentStats";
+import { calculateOrganizationStats } from "./utils/organizationStats";
 
 type View =
   | "list"
@@ -19,7 +27,8 @@ type View =
   | "data"
   | "stats"
   | "fighterStats"
-  | "paymentStats";
+  | "paymentStats"
+  | "organizationStats";
 
 function App() {
   const [currentView, setCurrentView] = useState<View>("list");
@@ -29,6 +38,18 @@ function App() {
   const [bettorStats, setBettorStats] = useState<BettorStats[]>([]);
   const [fighterStats, setFighterStats] = useState<FighterStats[]>([]);
   const [paymentStats, setPaymentStats] = useState<PaymentStats[]>([]);
+  const [organizationStats, setOrganizationStats] = useState<OrganizationStats>(
+    {
+      totalBetAmount: 0,
+      totalPoolAmount: 0,
+      totalOrganizerProfit: 0,
+      totalFighterPrizeAmount: 0,
+      totalEntryFees: 0,
+      totalMayorSpecialPrize: 0,
+      totalBettorSpecialAllowance: 0,
+      matchCount: 0,
+    }
+  );
 
   useEffect(() => {
     loadMatches();
@@ -54,6 +75,10 @@ function App() {
     // 支払い統計を計算
     const pStats = calculatePaymentStats(loadedMatches);
     setPaymentStats(pStats);
+
+    // 運営統計を計算
+    const oStats = calculateOrganizationStats(loadedMatches);
+    setOrganizationStats(oStats);
   };
   const handleMatchSaved = () => {
     loadMatches();
@@ -120,6 +145,12 @@ function App() {
                     className="px-4 py-2 text-green-600 hover:text-green-800 border border-green-300 rounded-md hover:bg-green-50"
                   >
                     支払い統計
+                  </button>
+                  <button
+                    onClick={() => setCurrentView("organizationStats")}
+                    className="px-4 py-2 text-blue-600 hover:text-blue-800 border border-blue-300 rounded-md hover:bg-blue-50"
+                  >
+                    運営統計
                   </button>
                   <button
                     onClick={() => setCurrentView("data")}
@@ -196,6 +227,10 @@ function App() {
               matches={matches}
               onDataUpdate={loadMatches}
             />
+          )}
+
+          {currentView === "organizationStats" && (
+            <OrganizationStatsView organizationStats={organizationStats} />
           )}
         </div>
       </main>
