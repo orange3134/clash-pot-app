@@ -40,7 +40,7 @@ export default function MatchDetail({ match, onBack }: MatchDetailProps) {
         {/* 基本情報 */}
         <div className="p-6 border-b">
           <h2 className="text-xl font-semibold mb-4">基本情報</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="bg-gray-50 p-4 rounded">
               <div className="text-sm text-gray-500">選手参加費</div>
               <div className="text-2xl font-bold text-gray-900">{formatCurrency(match.entryFee)}</div>
@@ -52,6 +52,10 @@ export default function MatchDetail({ match, onBack }: MatchDetailProps) {
             <div className="bg-gray-50 p-4 rounded">
               <div className="text-sm text-gray-500">市長特別賞金</div>
               <div className="text-2xl font-bold text-gray-900">{formatCurrency(match.mayorSpecialPrize)}</div>
+            </div>
+            <div className="bg-gray-50 p-4 rounded">
+              <div className="text-sm text-gray-500">ベッター特別手当</div>
+              <div className="text-2xl font-bold text-gray-900">{formatCurrency(match.bettorSpecialAllowance || 0)}</div>
             </div>
           </div>
         </div>
@@ -157,16 +161,25 @@ export default function MatchDetail({ match, onBack }: MatchDetailProps) {
                 <div className="bg-green-50 p-4 rounded border border-green-200">
                   <div className="space-y-2">
                     {results.winningBettors.map((winner, index) => (
-                      <div key={index} className="flex justify-between items-center bg-white p-3 rounded">
-                        <div>
-                          <span className="font-medium">{winner.bettor.name}</span>
-                          <span className="text-sm text-gray-500 ml-2">
-                            ({winner.bettor.betAmount}口 × {formatCurrency(match.betUnitPrice)})
-                          </span>
+                      <div key={index} className="bg-white p-3 rounded">
+                        <div className="flex justify-between items-center">
+                          <div>
+                            <span className="font-medium">{winner.bettor.name}</span>
+                            <span className="text-sm text-gray-500 ml-2">
+                              ({winner.bettor.betAmount}口 × {formatCurrency(match.betUnitPrice)})
+                            </span>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-lg font-bold text-green-600">
+                              {formatCurrency(winner.payout)}
+                            </div>
+                            {winner.specialAllowance > 0 && (
+                              <div className="text-sm text-purple-600">
+                                +{formatCurrency(winner.specialAllowance)} (特別手当)
+                              </div>
+                            )}
+                          </div>
                         </div>
-                        <span className="text-lg font-bold text-green-600">
-                          {formatCurrency(winner.payout)}
-                        </span>
                       </div>
                     ))}
                   </div>

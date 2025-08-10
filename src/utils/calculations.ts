@@ -27,9 +27,13 @@ export function calculateMatchResults(match: Match): MatchResults | null {
       
       const payout = winningBetUnits > 0 ? (totalPoolAmount * bettor.betAmount) / winningBetUnits : 0;
       
+      // ベッター特別手当の分配（勝利ベッターの口数に応じて分配）
+      const specialAllowance = winningBetUnits > 0 ? (match.bettorSpecialAllowance * bettor.betAmount) / winningBetUnits : 0;
+      
       return {
         bettor,
-        payout: Math.round(payout * 100) / 100 // 小数点第2位で四捨五入
+        payout: Math.round(payout * 100) / 100, // 小数点第2位で四捨五入
+        specialAllowance: Math.round(specialAllowance * 100) / 100
       };
     });
 

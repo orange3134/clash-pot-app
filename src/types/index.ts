@@ -18,6 +18,7 @@ export interface Match {
   betUnitPrice: number;
   winnerId: string | null;
   mayorSpecialPrize: number;
+  bettorSpecialAllowance: number; // ベッター特別手当
   createdAt: string;
   isCompleted: boolean;
 }
@@ -33,6 +34,7 @@ export interface MatchResults {
   winningBettors: Array<{
     bettor: Bettor;
     payout: number;
+    specialAllowance: number; // ベッター特別手当の分配額
   }>;
 }
 
@@ -44,4 +46,14 @@ export interface BettorStats {
   matchCount: number;
   winCount: number;
   winRate: number;
+}
+
+export interface FighterStats {
+  name: string;
+  totalPrize: number;
+  matchCount: number;
+  winCount: number;
+  loseCount: number;
+  winRate: number;
+  averagePrize: number;
 }

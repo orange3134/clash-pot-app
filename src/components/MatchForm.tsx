@@ -20,6 +20,7 @@ export default function MatchForm({ onMatchSaved, editMatch }: MatchFormProps) {
   const [betUnitPrice, setBetUnitPrice] = useState(editMatch?.betUnitPrice || 0);
   const [winnerId, setWinnerId] = useState(editMatch?.winnerId || '');
   const [mayorSpecialPrize, setMayorSpecialPrize] = useState(editMatch?.mayorSpecialPrize || 0);
+  const [bettorSpecialAllowance, setBettorSpecialAllowance] = useState(editMatch?.bettorSpecialAllowance || 0);
 
   const addBettor = () => {
     const newBettor: Bettor = {
@@ -39,6 +40,7 @@ export default function MatchForm({ onMatchSaved, editMatch }: MatchFormProps) {
       setEntryFee(lastMatch.entryFee);
       setBetUnitPrice(lastMatch.betUnitPrice);
       setMayorSpecialPrize(lastMatch.mayorSpecialPrize);
+      setBettorSpecialAllowance(lastMatch.bettorSpecialAllowance || 0);
     }
   };
 
@@ -83,6 +85,7 @@ export default function MatchForm({ onMatchSaved, editMatch }: MatchFormProps) {
       betUnitPrice,
       winnerId: winnerId || null,
       mayorSpecialPrize,
+      bettorSpecialAllowance,
       createdAt: editMatch?.createdAt || new Date().toISOString(),
       isCompleted: !!winnerId
     };
@@ -98,6 +101,7 @@ export default function MatchForm({ onMatchSaved, editMatch }: MatchFormProps) {
       setBetUnitPrice(0);
       setWinnerId('');
       setMayorSpecialPrize(0);
+      setBettorSpecialAllowance(0);
     }
   };
 
@@ -109,6 +113,7 @@ export default function MatchForm({ onMatchSaved, editMatch }: MatchFormProps) {
     betUnitPrice,
     winnerId,
     mayorSpecialPrize,
+    bettorSpecialAllowance,
     createdAt: new Date().toISOString(),
     isCompleted: true
   }) : null;
@@ -207,6 +212,23 @@ export default function MatchForm({ onMatchSaved, editMatch }: MatchFormProps) {
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
                 required
               />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                ベッター特別手当 ($)
+              </label>
+              <input
+                type="number"
+                min="0"
+                step="0.01"
+                value={bettorSpecialAllowance}
+                onChange={(e) => setBettorSpecialAllowance(Number(e.target.value))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                required
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                勝利したベッターの口数に応じて分配されます
+              </p>
             </div>
           </div>
         </div>

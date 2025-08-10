@@ -53,7 +53,8 @@ export function calculateBettorStats(matches: Match[]): BettorStats[] {
         (wb) => wb.bettor.id === bettor.id
       );
       if (winningBettor) {
-        stats.totalPayout += winningBettor.payout;
+        // 通常の配当とベッター特別手当を合計
+        stats.totalPayout += winningBettor.payout + winningBettor.specialAllowance;
         stats.winCount += 1;
       }
     });
