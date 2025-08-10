@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Match, Fighter, Bettor } from '../types';
-import { saveMatch, getMatches } from '../utils/storage';
-import { calculateMatchResults, formatCurrency } from '../utils/calculations';
+import React, { useState } from "react";
+import { Match, Fighter, Bettor } from "../types";
+import { saveMatch, getMatches } from "../utils/storage";
+import { calculateMatchResults, formatCurrency } from "../utils/calculations";
 
 interface MatchFormProps {
   onMatchSaved: () => void;
@@ -11,23 +11,29 @@ interface MatchFormProps {
 export default function MatchForm({ onMatchSaved, editMatch }: MatchFormProps) {
   const [fighters, setFighters] = useState<[Fighter, Fighter]>(
     editMatch?.fighters || [
-      { id: '1', name: '' },
-      { id: '2', name: '' }
+      { id: "1", name: "" },
+      { id: "2", name: "" },
     ]
   );
   const [bettors, setBettors] = useState<Bettor[]>(editMatch?.bettors || []);
   const [entryFee, setEntryFee] = useState(editMatch?.entryFee || 0);
-  const [betUnitPrice, setBetUnitPrice] = useState(editMatch?.betUnitPrice || 0);
-  const [winnerId, setWinnerId] = useState(editMatch?.winnerId || '');
-  const [mayorSpecialPrize, setMayorSpecialPrize] = useState(editMatch?.mayorSpecialPrize || 0);
-  const [bettorSpecialAllowance, setBettorSpecialAllowance] = useState(editMatch?.bettorSpecialAllowance || 0);
+  const [betUnitPrice, setBetUnitPrice] = useState(
+    editMatch?.betUnitPrice || 0
+  );
+  const [winnerId, setWinnerId] = useState(editMatch?.winnerId || "");
+  const [mayorSpecialPrize, setMayorSpecialPrize] = useState(
+    editMatch?.mayorSpecialPrize || 0
+  );
+  const [bettorSpecialAllowance, setBettorSpecialAllowance] = useState(
+    editMatch?.bettorSpecialAllowance || 0
+  );
 
   const addBettor = () => {
     const newBettor: Bettor = {
       id: Date.now().toString(),
-      name: '',
+      name: "",
       betAmount: 1,
-      fighterId: fighters[0].id
+      fighterId: fighters[0].id,
     };
     setBettors([...bettors, newBettor]);
   };
@@ -44,10 +50,17 @@ export default function MatchForm({ onMatchSaved, editMatch }: MatchFormProps) {
     }
   };
 
-  const updateBettor = (index: number, field: keyof Bettor, value: string | number) => {
+  const updateBettor = (
+    index: number,
+    field: keyof Bettor,
+    value: string | number
+  ) => {
     const updatedBettors = [...bettors];
-    if (field === 'betAmount') {
-      updatedBettors[index] = { ...updatedBettors[index], [field]: Number(value) };
+    if (field === "betAmount") {
+      updatedBettors[index] = {
+        ...updatedBettors[index],
+        [field]: Number(value),
+      };
     } else {
       updatedBettors[index] = { ...updatedBettors[index], [field]: value };
     }
@@ -66,14 +79,14 @@ export default function MatchForm({ onMatchSaved, editMatch }: MatchFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!fighters[0].name || !fighters[1].name) {
-      alert('選手名を入力してください');
+      alert("選手名を入力してください");
       return;
     }
 
-    if (bettors.some(b => !b.name || b.betAmount <= 0)) {
-      alert('賭け参加者の情報を正しく入力してください');
+    if (bettors.some((b) => !b.name || b.betAmount <= 0)) {
+      alert("賭け参加者の情報を正しく入力してください");
       return;
     }
 
@@ -87,43 +100,48 @@ export default function MatchForm({ onMatchSaved, editMatch }: MatchFormProps) {
       mayorSpecialPrize,
       bettorSpecialAllowance,
       createdAt: editMatch?.createdAt || new Date().toISOString(),
-      isCompleted: !!winnerId
+      isCompleted: !!winnerId,
     };
 
     saveMatch(match);
     onMatchSaved();
-    
+
     // フォームをリセット（編集中でない場合）
     if (!editMatch) {
-      setFighters([{ id: '1', name: '' }, { id: '2', name: '' }]);
+      setFighters([
+        { id: "1", name: "" },
+        { id: "2", name: "" },
+      ]);
       setBettors([]);
       setEntryFee(0);
       setBetUnitPrice(0);
-      setWinnerId('');
+      setWinnerId("");
       setMayorSpecialPrize(0);
       setBettorSpecialAllowance(0);
     }
   };
 
-  const results = winnerId ? calculateMatchResults({
-    id: 'temp',
-    fighters,
-    bettors,
-    entryFee,
-    betUnitPrice,
-    winnerId,
-    mayorSpecialPrize,
-    bettorSpecialAllowance,
-    createdAt: new Date().toISOString(),
-    isCompleted: true
-  }) : null;
+  const results = winnerId
+    ? calculateMatchResults({
+        id: "temp",
+        fighters,
+        bettors,
+        entryFee,
+        betUnitPrice,
+        winnerId,
+        mayorSpecialPrize,
+        bettorSpecialAllowance,
+        createdAt: new Date().toISOString(),
+        isCompleted: true,
+      })
+    : null;
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold text-gray-900 mb-6">
-        {editMatch ? '試合編集' : '新規試合登録'}
+        {editMatch ? "試合編集" : "新規試合登録"}
       </h2>
-      
+
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* 選手情報 */}
         <div className="bg-gray-50 p-4 rounded-lg">
@@ -222,7 +240,9 @@ export default function MatchForm({ onMatchSaved, editMatch }: MatchFormProps) {
                 min="0"
                 step="0.01"
                 value={bettorSpecialAllowance}
-                onChange={(e) => setBettorSpecialAllowance(Number(e.target.value))}
+                onChange={(e) =>
+                  setBettorSpecialAllowance(Number(e.target.value))
+                }
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
                 required
               />
@@ -245,9 +265,12 @@ export default function MatchForm({ onMatchSaved, editMatch }: MatchFormProps) {
               参加者追加
             </button>
           </div>
-          
+
           {bettors.map((bettor, index) => (
-            <div key={bettor.id} className="flex gap-4 items-end mb-3 p-3 bg-white rounded border">
+            <div
+              key={bettor.id}
+              className="flex gap-4 items-end mb-3 p-3 bg-white rounded border"
+            >
               <div className="flex-1">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   名前
@@ -255,7 +278,7 @@ export default function MatchForm({ onMatchSaved, editMatch }: MatchFormProps) {
                 <input
                   type="text"
                   value={bettor.name}
-                  onChange={(e) => updateBettor(index, 'name', e.target.value)}
+                  onChange={(e) => updateBettor(index, "name", e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
                   required
                 />
@@ -268,7 +291,9 @@ export default function MatchForm({ onMatchSaved, editMatch }: MatchFormProps) {
                   type="number"
                   min="1"
                   value={bettor.betAmount}
-                  onChange={(e) => updateBettor(index, 'betAmount', e.target.value)}
+                  onChange={(e) =>
+                    updateBettor(index, "betAmount", e.target.value)
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
                   required
                 />
@@ -279,12 +304,18 @@ export default function MatchForm({ onMatchSaved, editMatch }: MatchFormProps) {
                 </label>
                 <select
                   value={bettor.fighterId}
-                  onChange={(e) => updateBettor(index, 'fighterId', e.target.value)}
+                  onChange={(e) =>
+                    updateBettor(index, "fighterId", e.target.value)
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
                   required
                 >
-                  <option value={fighters[0].id}>{fighters[0].name || '選手1'}</option>
-                  <option value={fighters[1].id}>{fighters[1].name || '選手2'}</option>
+                  <option value={fighters[0].id}>
+                    {fighters[0].name || "選手1"}
+                  </option>
+                  <option value={fighters[1].id}>
+                    {fighters[1].name || "選手2"}
+                  </option>
                 </select>
               </div>
               <button
@@ -311,8 +342,12 @@ export default function MatchForm({ onMatchSaved, editMatch }: MatchFormProps) {
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
               <option value="">-- 選択してください --</option>
-              <option value={fighters[0].id}>{fighters[0].name || '選手1'}</option>
-              <option value={fighters[1].id}>{fighters[1].name || '選手2'}</option>
+              <option value={fighters[0].id}>
+                {fighters[0].name || "選手1"}
+              </option>
+              <option value={fighters[1].id}>
+                {fighters[1].name || "選手2"}
+              </option>
             </select>
           </div>
         </div>
@@ -320,34 +355,51 @@ export default function MatchForm({ onMatchSaved, editMatch }: MatchFormProps) {
         {/* 計算結果 */}
         {results && (
           <div className="bg-gold-50 p-4 rounded-lg border border-gold-200">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">計算結果</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-3">
+              計算結果
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
               <div className="bg-white p-3 rounded border">
                 <div className="font-medium text-gray-700">掛け金総額</div>
-                <div className="text-lg font-bold text-gray-900">{formatCurrency(results.totalBetAmount)}</div>
+                <div className="text-lg font-bold text-gray-900">
+                  {formatCurrency(results.totalBetAmount)}
+                </div>
               </div>
               <div className="bg-white p-3 rounded border">
                 <div className="font-medium text-gray-700">山分け総額</div>
-                <div className="text-lg font-bold text-green-600">{formatCurrency(results.totalPoolAmount)}</div>
+                <div className="text-lg font-bold text-green-600">
+                  {formatCurrency(results.totalPoolAmount)}
+                </div>
               </div>
               <div className="bg-white p-3 rounded border">
                 <div className="font-medium text-gray-700">勝利選手賞金</div>
-                <div className="text-lg font-bold text-gold-600">{formatCurrency(results.winnerPrize)}</div>
+                <div className="text-lg font-bold text-gold-600">
+                  {formatCurrency(results.winnerPrize)}
+                </div>
               </div>
               <div className="bg-white p-3 rounded border">
                 <div className="font-medium text-gray-700">敗者選手賞金</div>
-                <div className="text-lg font-bold text-gray-600">{formatCurrency(results.loserPrize)}</div>
+                <div className="text-lg font-bold text-gray-600">
+                  {formatCurrency(results.loserPrize)}
+                </div>
               </div>
             </div>
-            
+
             {results.winningBettors.length > 0 && (
               <div className="mt-4">
-                <h4 className="font-medium text-gray-900 mb-2">勝利賭け参加者の配当</h4>
+                <h4 className="font-medium text-gray-900 mb-2">
+                  勝利賭け参加者の配当
+                </h4>
                 <div className="space-y-2">
                   {results.winningBettors.map((winner, index) => (
-                    <div key={index} className="flex justify-between items-center bg-white p-2 rounded border">
+                    <div
+                      key={index}
+                      className="flex justify-between items-center bg-white p-2 rounded border"
+                    >
                       <span className="font-medium">{winner.bettor.name}</span>
-                      <span className="text-green-600 font-bold">{formatCurrency(winner.payout)}</span>
+                      <span className="text-green-600 font-bold">
+                        {formatCurrency(winner.payout)}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -361,7 +413,7 @@ export default function MatchForm({ onMatchSaved, editMatch }: MatchFormProps) {
             type="submit"
             className="px-6 py-3 bg-primary-600 text-white font-medium rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
           >
-            {editMatch ? '更新' : '保存'}
+            {editMatch ? "更新" : "保存"}
           </button>
         </div>
       </form>

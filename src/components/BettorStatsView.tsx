@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
-import { BettorStats, Match } from '../types';
-import { formatCurrency } from '../utils/calculations';
-import { updateBettorPaymentStatus, getBettorPaymentStatus } from '../utils/paymentStatus';
+import React, { useState } from "react";
+import { BettorStats, Match } from "../types";
+import { formatCurrency } from "../utils/calculations";
+import {
+  updateBettorPaymentStatus,
+  getBettorPaymentStatus,
+} from "../utils/paymentStatus";
 
 interface BettorStatsViewProps {
   bettorStats: BettorStats[];
@@ -9,37 +12,53 @@ interface BettorStatsViewProps {
   onDataUpdate: () => void;
 }
 
-const BettorStatsView: React.FC<BettorStatsViewProps> = ({ bettorStats, matches, onDataUpdate }) => {
+const BettorStatsView: React.FC<BettorStatsViewProps> = ({
+  bettorStats,
+  matches,
+  onDataUpdate,
+}) => {
   const [showPaymentDetails, setShowPaymentDetails] = useState(false);
 
   // ベッター名から支払い状況を取得（勝利時のみ）
   const getBettorPaymentInfo = (bettorName: string) => {
-    const bettorMatches = matches.filter(match => 
-      match.isCompleted && match.bettors.some(b => b.name === bettorName && b.fighterId === match.winnerId)
+    const bettorMatches = matches.filter(
+      (match) =>
+        match.isCompleted &&
+        match.bettors.some(
+          (b) => b.name === bettorName && b.fighterId === match.winnerId
+        )
     );
-    
+
     // ベッター全体の支払い状況として、全勝利で一度でも支払い済みがあるかチェック
-    const hasAnyPayment = bettorMatches.some(match => {
-      const bettor = match.bettors.find(b => b.name === bettorName && b.fighterId === match.winnerId);
+    const hasAnyPayment = bettorMatches.some((match) => {
+      const bettor = match.bettors.find(
+        (b) => b.name === bettorName && b.fighterId === match.winnerId
+      );
       return bettor ? getBettorPaymentStatus(match, bettor.id) : false;
     });
-    
+
     return { isPaid: hasAnyPayment, totalWins: bettorMatches.length };
   };
 
   const handleGlobalPaymentChange = (bettorName: string, isPaid: boolean) => {
     // ベッターの全勝利試合の支払い状況を一括更新
-    const bettorMatches = matches.filter(match => 
-      match.isCompleted && match.bettors.some(b => b.name === bettorName && b.fighterId === match.winnerId)
+    const bettorMatches = matches.filter(
+      (match) =>
+        match.isCompleted &&
+        match.bettors.some(
+          (b) => b.name === bettorName && b.fighterId === match.winnerId
+        )
     );
-    
-    bettorMatches.forEach(match => {
-      const bettor = match.bettors.find(b => b.name === bettorName && b.fighterId === match.winnerId);
+
+    bettorMatches.forEach((match) => {
+      const bettor = match.bettors.find(
+        (b) => b.name === bettorName && b.fighterId === match.winnerId
+      );
       if (bettor) {
         updateBettorPaymentStatus(match, bettor.id, isPaid);
       }
     });
-    
+
     onDataUpdate();
   };
   if (bettorStats.length === 0) {
@@ -71,11 +90,11 @@ const BettorStatsView: React.FC<BettorStatsViewProps> = ({ bettorStats, matches,
             onClick={() => setShowPaymentDetails(!showPaymentDetails)}
             className={`px-4 py-2 text-sm rounded-md border ${
               showPaymentDetails
-                ? 'bg-green-50 text-green-700 border-green-300'
-                : 'bg-gray-50 text-gray-700 border-gray-300'
+                ? "bg-green-50 text-green-700 border-green-300"
+                : "bg-gray-50 text-gray-700 border-gray-300"
             }`}
           >
-            {showPaymentDetails ? '支払い詳細を非表示' : '支払い詳細を表示'}
+            {showPaymentDetails ? "支払い詳細を非表示" : "支払い詳細を表示"}
           </button>
         </div>
       </div>
@@ -119,7 +138,7 @@ const BettorStatsView: React.FC<BettorStatsViewProps> = ({ bettorStats, matches,
             {bettorStats.map((stats, index) => {
               const paymentInfo = getBettorPaymentInfo(stats.name);
               return (
-                <tr 
+                <tr
                   key={stats.name}
                   className={index < 3 ? "bg-yellow-50" : "hover:bg-gray-50"}
                 >
@@ -172,13 +191,22 @@ const BettorStatsView: React.FC<BettorStatsViewProps> = ({ bettorStats, matches,
                           <input
                             type="checkbox"
                             checked={paymentInfo.isPaid}
-                            onChange={(e) => handleGlobalPaymentChange(stats.name, e.target.checked)}
+                            onChange={(e) =>
+                              handleGlobalPaymentChange(
+                                stats.name,
+                                e.target.checked
+                              )
+                            }
                             className="rounded border-gray-300 text-green-600 focus:ring-green-500"
                           />
-                          <span className={`text-sm font-medium ${
-                            paymentInfo.isPaid ? 'text-green-600' : 'text-red-600'
-                          }`}>
-                            {paymentInfo.isPaid ? '支払済み' : '未払い'}
+                          <span
+                            className={`text-sm font-medium ${
+                              paymentInfo.isPaid
+                                ? "text-green-600"
+                                : "text-red-600"
+                            }`}
+                          >
+                            {paymentInfo.isPaid ? "支払済み" : "未払い"}
                           </span>
                         </label>
                       </div>

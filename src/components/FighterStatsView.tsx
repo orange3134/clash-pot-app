@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
-import { FighterStats, Match } from '../types';
-import { formatCurrency } from '../utils/calculations';
-import { updateFighterPaymentStatus, getFighterPaymentStatus } from '../utils/paymentStatus';
+import React, { useState } from "react";
+import { FighterStats, Match } from "../types";
+import { formatCurrency } from "../utils/calculations";
+import {
+  updateFighterPaymentStatus,
+  getFighterPaymentStatus,
+} from "../utils/paymentStatus";
 
 interface FighterStatsViewProps {
   fighterStats: FighterStats[];
@@ -9,45 +12,49 @@ interface FighterStatsViewProps {
   onDataUpdate: () => void;
 }
 
-const FighterStatsView: React.FC<FighterStatsViewProps> = ({ fighterStats, matches, onDataUpdate }) => {
+const FighterStatsView: React.FC<FighterStatsViewProps> = ({
+  fighterStats,
+  matches,
+  onDataUpdate,
+}) => {
   const [showPaymentDetails, setShowPaymentDetails] = useState(false);
 
   // 選手名から支払い状況を取得
   const getFighterPaymentInfo = (fighterName: string) => {
-    const fighterMatches = matches.filter(match => 
-      match.isCompleted && match.fighters.some(f => f.name === fighterName)
+    const fighterMatches = matches.filter(
+      (match) =>
+        match.isCompleted && match.fighters.some((f) => f.name === fighterName)
     );
-    
+
     // 選手全体の支払い状況として、全試合で一度でも支払い済みがあるかチェック
-    const hasAnyPayment = fighterMatches.some(match => {
-      const fighter = match.fighters.find(f => f.name === fighterName);
+    const hasAnyPayment = fighterMatches.some((match) => {
+      const fighter = match.fighters.find((f) => f.name === fighterName);
       return fighter ? getFighterPaymentStatus(match, fighter.id) : false;
     });
-    
+
     return { isPaid: hasAnyPayment, totalMatches: fighterMatches.length };
   };
 
   const handleGlobalPaymentChange = (fighterName: string, isPaid: boolean) => {
     // 選手の全試合の支払い状況を一括更新
-    const fighterMatches = matches.filter(match => 
-      match.isCompleted && match.fighters.some(f => f.name === fighterName)
+    const fighterMatches = matches.filter(
+      (match) =>
+        match.isCompleted && match.fighters.some((f) => f.name === fighterName)
     );
-    
-    fighterMatches.forEach(match => {
-      const fighter = match.fighters.find(f => f.name === fighterName);
+
+    fighterMatches.forEach((match) => {
+      const fighter = match.fighters.find((f) => f.name === fighterName);
       if (fighter) {
         updateFighterPaymentStatus(match, fighter.id, isPaid);
       }
     });
-    
+
     onDataUpdate();
   };
   if (fighterStats.length === 0) {
     return (
       <div className="bg-white rounded-lg shadow p-8 text-center">
-        <div className="text-gray-400 text-lg">
-          🥊 選手データがありません
-        </div>
+        <div className="text-gray-400 text-lg">🥊 選手データがありません</div>
         <p className="text-gray-500 mt-2">
           完了済みの試合がある場合、選手の統計が表示されます。
         </p>
@@ -60,9 +67,7 @@ const FighterStatsView: React.FC<FighterStatsViewProps> = ({ fighterStats, match
       <div className="px-6 py-4 border-b border-gray-200">
         <div className="flex justify-between items-center">
           <div>
-            <h2 className="text-xl font-semibold text-gray-900">
-              🥊 選手統計
-            </h2>
+            <h2 className="text-xl font-semibold text-gray-900">🥊 選手統計</h2>
             <p className="text-sm text-gray-600 mt-1">
               全試合通算の賞金・戦績統計
             </p>
@@ -71,11 +76,11 @@ const FighterStatsView: React.FC<FighterStatsViewProps> = ({ fighterStats, match
             onClick={() => setShowPaymentDetails(!showPaymentDetails)}
             className={`px-4 py-2 text-sm rounded-md border ${
               showPaymentDetails
-                ? 'bg-green-50 text-green-700 border-green-300'
-                : 'bg-gray-50 text-gray-700 border-gray-300'
+                ? "bg-green-50 text-green-700 border-green-300"
+                : "bg-gray-50 text-gray-700 border-gray-300"
             }`}
           >
-            {showPaymentDetails ? '支払い詳細を非表示' : '支払い詳細を表示'}
+            {showPaymentDetails ? "支払い詳細を非表示" : "支払い詳細を表示"}
           </button>
         </div>
       </div>
@@ -119,9 +124,9 @@ const FighterStatsView: React.FC<FighterStatsViewProps> = ({ fighterStats, match
             {fighterStats.map((stats, index) => {
               const paymentInfo = getFighterPaymentInfo(stats.name);
               return (
-                <tr 
+                <tr
                   key={stats.name}
-                  className={index < 3 ? 'bg-gold-50' : 'hover:bg-gray-50'}
+                  className={index < 3 ? "bg-gold-50" : "hover:bg-gray-50"}
                 >
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
@@ -148,9 +153,11 @@ const FighterStatsView: React.FC<FighterStatsViewProps> = ({ fighterStats, match
                     {stats.loseCount}敗
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
-                    <span className={`font-medium ${
-                      stats.winRate >= 50 ? 'text-green-600' : 'text-gray-900'
-                    }`}>
+                    <span
+                      className={`font-medium ${
+                        stats.winRate >= 50 ? "text-green-600" : "text-gray-900"
+                      }`}
+                    >
                       {stats.winRate.toFixed(1)}%
                     </span>
                   </td>
@@ -169,13 +176,22 @@ const FighterStatsView: React.FC<FighterStatsViewProps> = ({ fighterStats, match
                           <input
                             type="checkbox"
                             checked={paymentInfo.isPaid}
-                            onChange={(e) => handleGlobalPaymentChange(stats.name, e.target.checked)}
+                            onChange={(e) =>
+                              handleGlobalPaymentChange(
+                                stats.name,
+                                e.target.checked
+                              )
+                            }
                             className="rounded border-gray-300 text-green-600 focus:ring-green-500"
                           />
-                          <span className={`text-sm font-medium ${
-                            paymentInfo.isPaid ? 'text-green-600' : 'text-red-600'
-                          }`}>
-                            {paymentInfo.isPaid ? '支払済み' : '未払い'}
+                          <span
+                            className={`text-sm font-medium ${
+                              paymentInfo.isPaid
+                                ? "text-green-600"
+                                : "text-red-600"
+                            }`}
+                          >
+                            {paymentInfo.isPaid ? "支払済み" : "未払い"}
                           </span>
                         </label>
                       </div>
@@ -193,27 +209,37 @@ const FighterStatsView: React.FC<FighterStatsViewProps> = ({ fighterStats, match
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
           <div>
             <span className="text-gray-500">総選手数:</span>
-            <span className="ml-2 font-medium text-gray-900">{fighterStats.length}人</span>
+            <span className="ml-2 font-medium text-gray-900">
+              {fighterStats.length}人
+            </span>
           </div>
           <div>
             <span className="text-gray-500">総賞金額:</span>
             <span className="ml-2 font-medium text-gray-900">
-              {formatCurrency(fighterStats.reduce((sum, stats) => sum + stats.totalPrize, 0))}
+              {formatCurrency(
+                fighterStats.reduce((sum, stats) => sum + stats.totalPrize, 0)
+              )}
             </span>
           </div>
           <div>
             <span className="text-gray-500">総試合数:</span>
             <span className="ml-2 font-medium text-gray-900">
-              {fighterStats.reduce((sum, stats) => sum + stats.matchCount, 0)}試合
+              {fighterStats.reduce((sum, stats) => sum + stats.matchCount, 0)}
+              試合
             </span>
           </div>
           <div>
             <span className="text-gray-500">平均勝率:</span>
             <span className="ml-2 font-medium text-gray-900">
-              {fighterStats.length > 0 
-                ? (fighterStats.reduce((sum, stats) => sum + stats.winRate, 0) / fighterStats.length).toFixed(1)
-                : '0.0'
-              }%
+              {fighterStats.length > 0
+                ? (
+                    fighterStats.reduce(
+                      (sum, stats) => sum + stats.winRate,
+                      0
+                    ) / fighterStats.length
+                  ).toFixed(1)
+                : "0.0"}
+              %
             </span>
           </div>
         </div>

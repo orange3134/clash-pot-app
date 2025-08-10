@@ -54,7 +54,8 @@ export function calculateBettorStats(matches: Match[]): BettorStats[] {
       );
       if (winningBettor) {
         // 通常の配当とベッター特別手当を合計
-        const totalWinnings = winningBettor.payout + (winningBettor.specialAllowance || 0);
+        const totalWinnings =
+          winningBettor.payout + (winningBettor.specialAllowance || 0);
         stats.totalPayout += totalWinnings;
         stats.winCount += 1;
       }
@@ -67,7 +68,9 @@ export function calculateBettorStats(matches: Match[]): BettorStats[] {
       name: stats.name,
       totalBetAmount: stats.totalBetAmount, // 口数として表示
       totalPayout: isNaN(stats.totalPayout) ? 0 : stats.totalPayout,
-      netResult: isNaN(stats.totalPayout - stats.totalBetMoney) ? -stats.totalBetMoney : stats.totalPayout - stats.totalBetMoney,
+      netResult: isNaN(stats.totalPayout - stats.totalBetMoney)
+        ? -stats.totalBetMoney
+        : stats.totalPayout - stats.totalBetMoney,
       matchCount: stats.matchCount,
       winCount: stats.winCount,
       winRate:

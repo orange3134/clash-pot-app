@@ -5,12 +5,21 @@ import MatchDetail from "./components/MatchDetail";
 import DataManager from "./components/DataManager";
 import BettorStatsView from "./components/BettorStatsView";
 import FighterStatsView from "./components/FighterStatsView";
-import { Match, BettorStats, FighterStats } from "./types";
+import PaymentStatsView from "./components/PaymentStatsView";
+import { Match, BettorStats, FighterStats, PaymentStats } from "./types";
 import { getMatches, deleteMatch } from "./utils/storage";
 import { calculateBettorStats } from "./utils/bettorStats";
 import { calculateFighterStats } from "./utils/fighterStats";
+import { calculatePaymentStats } from "./utils/paymentStats";
 
-type View = "list" | "form" | "detail" | "data" | "stats" | "fighterStats";
+type View =
+  | "list"
+  | "form"
+  | "detail"
+  | "data"
+  | "stats"
+  | "fighterStats"
+  | "paymentStats";
 
 function App() {
   const [currentView, setCurrentView] = useState<View>("list");
@@ -19,6 +28,7 @@ function App() {
   const [editingMatch, setEditingMatch] = useState<Match | null>(null);
   const [bettorStats, setBettorStats] = useState<BettorStats[]>([]);
   const [fighterStats, setFighterStats] = useState<FighterStats[]>([]);
+  const [paymentStats, setPaymentStats] = useState<PaymentStats[]>([]);
 
   useEffect(() => {
     loadMatches();
@@ -32,15 +42,20 @@ function App() {
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
     setMatches(loadedMatches);
-    
+
     // 賭け参加者統計を計算
     const bStats = calculateBettorStats(loadedMatches);
     setBettorStats(bStats);
-    
+
     // 選手統計を計算
     const fStats = calculateFighterStats(loadedMatches);
     setFighterStats(fStats);
-  };  const handleMatchSaved = () => {
+
+    // 支払い統計を計算
+    const pStats = calculatePaymentStats(loadedMatches);
+    setPaymentStats(pStats);
+  };
+  const handleMatchSaved = () => {
     loadMatches();
     setCurrentView("list");
     setEditingMatch(null);
@@ -101,6 +116,12 @@ function App() {
                     参加者統計
                   </button>
                   <button
+                    onClick={() => setCurrentView("paymentStats")}
+                    className="px-4 py-2 text-green-600 hover:text-green-800 border border-green-300 rounded-md hover:bg-green-50"
+                  >
+                    支払い統計
+                  </button>
+                  <button
                     onClick={() => setCurrentView("data")}
                     className="px-4 py-2 text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md hover:bg-gray-50"
                   >
@@ -154,11 +175,27 @@ function App() {
           {currentView === "data" && <DataManager onDataUpdate={loadMatches} />}
 
           {currentView === "stats" && (
-            <BettorStatsView bettorStats={bettorStats} matches={matches} onDataUpdate={loadMatches} />
+            <BettorStatsView
+              bettorStats={bettorStats}
+              matches={matches}
+              onDataUpdate={loadMatches}
+            />
           )}
 
           {currentView === "fighterStats" && (
-            <FighterStatsView fighterStats={fighterStats} matches={matches} onDataUpdate={loadMatches} />
+            <FighterStatsView
+              fighterStats={fighterStats}
+              matches={matches}
+              onDataUpdate={loadMatches}
+            />
+          )}
+
+          {currentView === "paymentStats" && (
+            <PaymentStatsView
+              paymentStats={paymentStats}
+              matches={matches}
+              onDataUpdate={loadMatches}
+            />
           )}
         </div>
       </main>

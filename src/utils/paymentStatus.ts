@@ -1,5 +1,5 @@
-import { Match } from '../types';
-import { saveMatch } from './storage';
+import { Match } from "../types";
+import { saveMatch } from "./storage";
 
 /**
  * 選手の支払い状況を更新する
@@ -19,7 +19,7 @@ export function updateFighterPaymentStatus(
       bettors: match.paymentStatus?.bettors || {},
     },
   };
-  
+
   saveMatch(updatedMatch);
   return updatedMatch;
 }
@@ -42,7 +42,7 @@ export function updateBettorPaymentStatus(
       },
     },
   };
-  
+
   saveMatch(updatedMatch);
   return updatedMatch;
 }
@@ -50,13 +50,19 @@ export function updateBettorPaymentStatus(
 /**
  * 選手の支払い状況を取得する
  */
-export function getFighterPaymentStatus(match: Match, fighterId: string): boolean {
+export function getFighterPaymentStatus(
+  match: Match,
+  fighterId: string
+): boolean {
   return match.paymentStatus?.fighters?.[fighterId] || false;
 }
 
 /**
  * ベッターの支払い状況を取得する
  */
-export function getBettorPaymentStatus(match: Match, bettorId: string): boolean {
+export function getBettorPaymentStatus(
+  match: Match,
+  bettorId: string
+): boolean {
   return match.paymentStatus?.bettors?.[bettorId] || false;
 }
