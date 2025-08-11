@@ -85,16 +85,10 @@ const PaymentStatsView: React.FC<PaymentStatsViewProps> = ({
                 参加費
               </th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                賭け投資額
-              </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                 総投資額
               </th>
               <th className="px-6 py-3 text-right text-xs font-medium text-green-700 uppercase tracking-wider bg-green-50">
                 純益
-              </th>
-              <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                参加形態
               </th>
               <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                 支払い状況
@@ -155,11 +149,6 @@ const PaymentStatsView: React.FC<PaymentStatsViewProps> = ({
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-900">
-                  {stats.betInvestment > 0
-                    ? formatCurrency(stats.betInvestment)
-                    : "-"}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-900">
                   {stats.totalInvestment > 0
                     ? formatCurrency(stats.totalInvestment)
                     : "-"}
@@ -173,20 +162,6 @@ const PaymentStatsView: React.FC<PaymentStatsViewProps> = ({
                     {stats.netProfit >= 0 ? "+" : ""}
                     {formatCurrency(stats.netProfit)}
                   </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-center text-sm">
-                  <div className="flex justify-center space-x-1">
-                    {stats.fighterMatches > 0 && (
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800">
-                        選手
-                      </span>
-                    )}
-                    {stats.bettorMatches > 0 && (
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-purple-100 text-purple-800">
-                        ベッター
-                      </span>
-                    )}
-                  </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-center text-sm">
                   <div className="flex items-center justify-center">
@@ -220,7 +195,7 @@ const PaymentStatsView: React.FC<PaymentStatsViewProps> = ({
 
       {/* 統計サマリー */}
       <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-        <div className="grid grid-cols-2 md:grid-cols-8 gap-4 text-sm">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-4 text-sm">
           <div>
             <span className="text-gray-500">総人数:</span>
             <span className="ml-2 font-medium text-gray-900">
@@ -243,17 +218,6 @@ const PaymentStatsView: React.FC<PaymentStatsViewProps> = ({
             <span className="ml-2 font-medium text-red-600">
               {formatCurrency(
                 paymentStats.reduce((sum, stats) => sum + stats.entryFees, 0)
-              )}
-            </span>
-          </div>
-          <div>
-            <span className="text-gray-500">総賭け額:</span>
-            <span className="ml-2 font-medium text-gray-900">
-              {formatCurrency(
-                paymentStats.reduce(
-                  (sum, stats) => sum + stats.betInvestment,
-                  0
-                )
               )}
             </span>
           </div>
